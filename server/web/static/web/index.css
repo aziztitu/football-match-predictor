@@ -1,0 +1,26 @@
+nav.navBar {
+  background-color: black;
+}
+
+.brand-logo {
+  left: 24px;
+  color: yellow !important;
+}
+
+label {
+  left: 0 !important;
+}
+
+form.predictionForm table tr td:nth-child(1) {
+  border-right: 0.5px rgba(0, 0, 0, 0.2) solid;
+  padding-right: 20px !important;
+}
+
+form.predictionForm table tr td:nth-child(2) {
+  border-left: 0.5px rgba(0, 0, 0, 0.2) solid;
+  padding-left: 20px !important;
+}
+
+form.predictionForm table tr {
+  border-bottom: 0 !important;
+}
