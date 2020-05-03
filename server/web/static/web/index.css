@@ -9,6 +9,7 @@ nav.navBar {
 .brand-logo {
   left: 24px;
   color: yellow !important;
+  width: 100%;
 }
 
 .brand-logo img {
