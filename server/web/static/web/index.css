@@ -37,6 +37,15 @@ form.predictionForm table tr {
     border-bottom: 0 !important;
 }
 
+form.predictionForm .input-field {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+form.predictionForm .input-field input[type=range]{
+  margin-top: 24px !important;
+}
+
 .btn {
     background-color: black;
     color: yellow;
@@ -48,6 +57,7 @@ form.predictionForm table tr {
 
 .prob-container {
     height: 100%;
+    padding: 0 !important;
 }
 
 .prob-container .prob-title {

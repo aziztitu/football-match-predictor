@@ -72,26 +72,30 @@
                         <tr>
                             <td>
                                 <div class="input-field col s12">
+                                    <label for="homeGoals">Goals: <span>0</span></label>
+                                    <br/>
                                     <input
                                         id="homeGoals"
                                         name="homeGoals"
-                                        type="number"
-                                        class="validate"
+                                        type="range"
+                                        min="0"
+                                        max="10"
                                         value="0"
                                     />
-                                    <label for="homeGoals">Goals</label>
                                 </div>
                             </td>
                             <td>
                                 <div class="input-field col s12">
+                                    <label for="awayGoals">Goals: <span>0</span></label>
+                                    <br/>
                                     <input
                                         id="awayGoals"
                                         name="awayGoals"
-                                        type="number"
-                                        class="validate"
+                                        type="range"
+                                        min="0"
+                                        max="10"
                                         value="0"
                                     />
-                                    <label for="awayGoals">Goals</label>
                                 </div>
                             </td>
                         </tr>
@@ -99,26 +103,30 @@
                         <tr>
                             <td>
                                 <div class="input-field col s12">
+                                    <label for="homeShots">Shots: <span>0</span></label>
+                                    <br/>
                                     <input
                                         id="homeShots"
                                         name="homeShots"
-                                        type="number"
-                                        class="validate"
+                                        type="range"
+                                        min="0"
+                                        max="50"
                                         value="0"
                                     />
-                                    <label for="homeShots">Shots</label>
                                 </div>
                             </td>
                             <td>
                                 <div class="input-field col s12">
+                                    <label for="awayShots">Shots: <span>0</span></label>
+                                    <br/>
                                     <input
                                         id="awayShots"
                                         name="awayShots"
-                                        type="number"
-                                        class="validate"
+                                        type="range"
+                                        min="0"
+                                        max="50"
                                         value="0"
                                     />
-                                    <label for="awayShots">Shots</label>
                                 </div>
                             </td>
                         </tr>
@@ -126,26 +134,30 @@
                         <tr>
                             <td>
                                 <div class="input-field col s12">
+                                    <label for="homeShotsOnTarget">Shots on target: <span>0</span></label>
+                                    <br/>
                                     <input
                                         id="homeShotsOnTarget"
                                         name="homeShotsOnTarget"
-                                        type="number"
-                                        class="validate"
+                                        type="range"
+                                        min="0"
+                                        max="50"
                                         value="0"
                                     />
-                                    <label for="homeShotsOnTarget">Shots on target</label>
                                 </div>
                             </td>
                             <td>
                                 <div class="input-field col s12">
+                                    <label for="awayShotsOnTarget">Shots on target: <span>0</span></label>
+                                    <br/>
                                     <input
                                         id="awayShotsOnTarget"
                                         name="awayShotsOnTarget"
-                                        type="number"
-                                        class="validate"
+                                        type="range"
+                                        min="0"
+                                        max="50"
                                         value="0"
                                     />
-                                    <label for="awayShotsOnTarget">Shots on target</label>
                                 </div>
                             </td>
                         </tr>
@@ -153,26 +165,30 @@
                         <tr>
                             <td>
                                 <div class="input-field col s12">
+                                    <label for="homeRedCards">Red Cards: <span>0</span></label>
+                                    <br/>
                                     <input
                                         id="homeRedCards"
                                         name="homeRedCards"
-                                        type="number"
-                                        class="validate"
+                                        type="range"
+                                        min="0"
+                                        max="11"
                                         value="0"
                                     />
-                                    <label for="homeRedCards">Red Cards</label>
                                 </div>
                             </td>
                             <td>
                                 <div class="input-field col s12">
+                                    <label for="awayRedCards">Red Cards: <span>0</span></label>
+                                    <br/>
                                     <input
                                         id="awayRedCards"
                                         name="awayRedCards"
-                                        type="number"
-                                        class="validate"
+                                        type="range"
+                                        min="0"
+                                        max="11"
                                         value="0"
                                     />
-                                    <label for="awayRedCards">Red Cards</label>
                                 </div>
                             </td>
                         </tr>
@@ -183,20 +199,20 @@
                     <span>Select Classifier:</span>
                     <div class="row">
                         <div class="col s4">
-                            <label>
-                                <input name="classifier" value="lr" type="radio" checked />
-                                <span>Logistical Regression</span>
+                            <label class="tooltipped" data-position="bottom" data-tooltip="Optimistic Results" >
+                                <input class="with-gap" name="classifier" value="lr" type="radio" checked/>
+                                <span>Logistical Regression One vs Rest</span>
                             </label>
                         </div>
                         <div class="col s4">
-                            <label>
-                                <input name="classifier" value="nb" type="radio" />
+                            <label class="tooltipped" data-position="bottom" data-tooltip="Naive Results" >
+                                <input class="with-gap tooltipped" name="classifier" value="nb" type="radio"/>
                                 <span>Naive Bayes</span>
                             </label>
                         </div>
                         <div class="col s4">
-                            <label>
-                                <input name="classifier" value="rf" type="radio" />
+                            <label class="tooltipped" data-position="bottom" data-tooltip="Pragmatic Results" >
+                                <input class="with-gap" name="classifier" value="rf" type="radio"/>
                                 <span>Random Forest</span>
                             </label>
                         </div>
@@ -271,6 +287,15 @@
         <script>
             function init() {
                 M.AutoInit();
+
+                $('.tooltipped').tooltip();
+
+                var predictionForm = $('#predictionForm');
+
+                predictionForm.find('input[type=range]').change((e) => {
+                    var inputObj = $(e.target);
+                    inputObj.siblings('label').find('span').html(inputObj.val());
+                });
             }
 
             function probToPercentStr(prob) {
