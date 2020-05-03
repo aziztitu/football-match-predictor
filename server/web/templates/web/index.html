@@ -32,12 +32,18 @@
 
         <div class="container section">
             <div class="card center">
+                <div class="card-image">
+                    <img style="background-size: cover; background-position: center;
+                    background-image: url({% static "web/flat-card-image.jpg" %});" height="200px"
+                    />
+                    <span class="card-title">Select Half-Time Stats</span>
+                </div>
                 <form class="card-content predictionForm" action="">
                     <table>
                         <tr>
                             <td>
                                 <div class="input-field col s12">
-                                    <select required class="validate">
+                                    <select id="homeTeam" required>
                                         <option value="" disabled selected>Select Home Team</option>
                                         {% for team, index in home_teams.items %}
                                         <option value="{{ index }}">{{ team }}</option>
@@ -48,7 +54,7 @@
                             </td>
                             <td>
                                 <div class="input-field col s12">
-                                    <select required>
+                                    <select id="awayTeam" required>
                                         <option value="" disabled selected>Select Away Team</option>
                                         {% for team, index in away_teams.items %}
                                         <option value="{{ index }}">{{ team }}</option>
@@ -58,14 +64,113 @@
                                 </div>
                             </td>
                         </tr>
+
+                        <tr>
+                            <td>
+                                <div class="input-field col s12">
+                                    <input
+                                        id="homeShots"
+                                        type="number"
+                                        class="validate"
+                                        value="0"
+                                    />
+                                    <label for="homeShots">Shots</label>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="input-field col s12">
+                                    <input
+                                        id="awayShots"
+                                        type="number"
+                                        class="validate"
+                                        value="0"
+                                    />
+                                    <label for="awayShots">Shots</label>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <div class="input-field col s12">
+                                    <input
+                                        id="homeShotsOnTarget"
+                                        type="number"
+                                        class="validate"
+                                        value="0"
+                                    />
+                                    <label for="homeShotsOnTarget">Shots on target</label>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="input-field col s12">
+                                    <input
+                                        id="awayShotsOnTarget"
+                                        type="number"
+                                        class="validate"
+                                        value="0"
+                                    />
+                                    <label for="awayShotsOnTarget">Shots on target</label>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <div class="input-field col s12">
+                                    <input
+                                        id="homeRedCards"
+                                        type="number"
+                                        class="validate"
+                                        value="0"
+                                    />
+                                    <label for="homeRedCards">Red Cards</label>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="input-field col s12">
+                                    <input
+                                        id="awayRedCards"
+                                        type="number"
+                                        class="validate"
+                                        value="0"
+                                    />
+                                    <label for="awayRedCards">Red Cards</label>
+                                </div>
+                            </td>
+                        </tr>
                     </table>
 
                     <br />
 
                     <button class="btn waves-effect waves-light" type="submit" name="action">
-                        Submit
+                        Predict Result
                         <i class="material-icons right">send</i>
                     </button>
+
+                    <div class="row" style="height: 80px; display: block">
+                        <br />
+                        <br />
+
+                        <div id="homeWinProbability" class="col blue prob-container" style="width: 33.3%;">
+                            <span class="prob-title">Home Win</span>
+                            <br/>
+                            <span class="prob-value">33.3%</span>
+                        </div>
+                        <div id="drawProbability" class="col green prob-container" style="width: 33.3%;">
+                            <span class="prob-title">Draw</span>
+                            <br/>
+                            <span class="prob-value">33.3%</span>
+                        </div>
+                        <div id="awayWinProbability" class="col red prob-container" style="width: 33.3%;">
+                            <span class="prob-title">Away Win</span>
+                            <br/>
+                            <span class="prob-value">33.3%</span>
+                        </div>
+                    </div>
+
+                    <br/>
+
                 </form>
             </div>
         </div>
@@ -75,7 +180,7 @@
                 style="text-decoration: underline;"
                 href="https://github.com/AzeeSoft/football-match-predictor"
                 target="blank"
-                >
+            >
                 View Source on GitHub</a
             >
         </center>

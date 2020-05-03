@@ -102,8 +102,8 @@ print(data)
 
 # Pre processing
 
-input_filter = ['home_encoded', 'away_encoded', 'HS',
-                'AS', 'HST', 'AST', 'HTCT', 'ATCT', 'HR', 'AR']
+input_filter = ['home_encoded', 'away_encoded', 'HTHG', 'HTAG', 'HS',
+                'AS', 'HST', 'AST', 'HR', 'AR']
 output_filter = ['FTR']
 
 cols_to_consider = input_filter + output_filter
@@ -120,11 +120,12 @@ away_encoded_mapping = dict(
     zip(encoder.classes_, encoder.transform(encoder.classes_).tolist()))
 data['away_encoded'] = away_encoded
 
-htg_df = data[['HTHG', 'HTAG']]
-cs_data = derive_clean_sheet(htg_df)
-cs_df = pd.DataFrame(cs_data, columns=['HTCT', 'ATCT'])
+# Deriving Clean Sheet
+# htg_df = data[['HTHG', 'HTAG']]
+# cs_data = derive_clean_sheet(htg_df)
+# cs_df = pd.DataFrame(cs_data, columns=['HTCS', 'ATCS'])
 
-data = pd.concat([data, cs_df], axis=1)
+# data = pd.concat([data, cs_df], axis=1)
 
 data = data[cols_to_consider]
 

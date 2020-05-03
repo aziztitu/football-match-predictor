@@ -8,7 +8,7 @@ import json
 
 def index(request):
     exportMetaDataFilePath = path.abspath(path.dirname(__name__)) + '/../exportedModels/metaData.json'
-    print(exportMetaDataFilePath)
+    # print(exportMetaDataFilePath)
 
     exportMetaData = {
       'home_teams': {},
@@ -17,7 +17,7 @@ def index(request):
     if path.exists(exportMetaDataFilePath):
         exportMetaDataFile = open(exportMetaDataFilePath, 'r')
         exportMetaData = json.load(exportMetaDataFile)
-        print(exportMetaData)
+        # print(exportMetaData)
 
     template = loader.get_template('web/index.html')
     context = {

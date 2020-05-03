@@ -45,3 +45,17 @@ form.predictionForm table tr {
 .btn:hover {
   background-color: #333;
 }
+
+.prob-container {
+  height: 100%;
+}
+
+.prob-container .prob-title {
+  color: white;
+  line-height: 36px;
+}
+
+.prob-container .prob-value {
+  color: white;
+  font-size: 24px;
+}
