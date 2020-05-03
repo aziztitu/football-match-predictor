@@ -9,7 +9,8 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
 from time import time
 from sklearn.metrics import f1_score
-from os import path
+from os import path, makedirs, walk
+from joblib import dump, load
 
 # Utility Functions
 
@@ -134,7 +135,7 @@ Y = data['FTR']
 X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2)
 
 svc_classifier = SVC(random_state=100, kernel='rbf')
-one_vs_all_clf = LogisticRegression(multi_class='ovr', max_iter=500)
+lr_classifier = LogisticRegression(multi_class='ovr', max_iter=500)
 nbClassifier = GaussianNB()
 dtClassifier = DecisionTreeClassifier()
 rfClassifier = RandomForestClassifier()
@@ -146,7 +147,7 @@ rfClassifier = RandomForestClassifier()
 print()
 print("Logistic Regression one vs All Classifier")
 print("-" * 20)
-model(one_vs_all_clf, X_train, Y_train, X_test, Y_test)
+model(lr_classifier, X_train, Y_train, X_test, Y_test)
 
 print()
 print("Gaussain Naive Bayes Classifier")
@@ -162,3 +163,18 @@ print()
 print("Random Forest Classifier")
 print("-" * 20)
 model(rfClassifier, X_train, Y_train, X_test, Y_test)
+
+# Exporting the Model
+print()
+print()
+shouldExport = input('Do you want to export the model(s) (y / n) ? ')
+if shouldExport.strip().lower() == 'y':
+  exportedModelsPath = 'exportedModels'
+
+  makedirs(exportedModelsPath, exist_ok=True)
+
+  dump(lr_classifier, f'{exportedModelsPath}/lr_classifier.model')
+  dump(nbClassifier, f'{exportedModelsPath}/nb_classifier.model')
+  dump(rfClassifier, f'{exportedModelsPath}/rf_classifier.model')
+
+  print(f'Model(s) exported successfully to {exportedModelsPath}/')
