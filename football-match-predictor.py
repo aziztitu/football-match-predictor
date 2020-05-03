@@ -11,6 +11,7 @@ from time import time
 from sklearn.metrics import f1_score
 from os import path, makedirs, walk
 from joblib import dump, load
+import json
 
 # Utility Functions
 
@@ -109,12 +110,13 @@ cols_to_consider = input_filter + output_filter
 
 encoder = LabelEncoder()
 home_encoded = encoder.fit_transform(data['HomeTeam'])
-away_encoded = encoder.fit_transform(data['AwayTeam'])
-wins_encoded = encoder.fit_transform(data['FTR'])
-
+home_encoded_mapping = dict(zip(encoder.classes_, encoder.transform(encoder.classes_).tolist()))
 data['home_encoded'] = home_encoded
+
+encoder = LabelEncoder()
+away_encoded = encoder.fit_transform(data['AwayTeam'])
+away_encoded_mapping = dict(zip(encoder.classes_, encoder.transform(encoder.classes_).tolist()))
 data['away_encoded'] = away_encoded
-data['wins_encoded'] = wins_encoded
 
 htg_df = data[['HTHG', 'HTAG']]
 cs_data = derive_clean_sheet(htg_df)
@@ -176,5 +178,12 @@ if shouldExport.strip().lower() == 'y':
   dump(lr_classifier, f'{exportedModelsPath}/lr_classifier.model')
   dump(nbClassifier, f'{exportedModelsPath}/nb_classifier.model')
   dump(rfClassifier, f'{exportedModelsPath}/rf_classifier.model')
+
+  exportMetaData = dict()
+  exportMetaData['homeTeams'] = home_encoded_mapping;
+  exportMetaData['awayTeams'] = away_encoded_mapping;
+
+  exportMetaDataFile = open(f'{exportedModelsPath}/metaData.json', 'w')
+  json.dump(exportMetaData, exportMetaDataFile)
 
   print(f'Model(s) exported successfully to {exportedModelsPath}/')
