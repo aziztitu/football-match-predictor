@@ -38,13 +38,17 @@
                     />
                     <span class="card-title">Select Half-Time Stats</span>
                 </div>
-                <form class="card-content predictionForm" action="">
+                <form
+                    class="card-content predictionForm"
+                    id="predictionForm"
+                    onsubmit="return false;"
+                >
                     <table>
                         <tr>
                             <td>
                                 <div class="input-field col s12">
-                                    <select id="homeTeam" required>
-                                        <option value="" disabled selected>Select Home Team</option>
+                                    <select id="homeTeam" name="homeTeam" required>
+                                        <!-- <option value="" disabled selected>Select Home Team</option> -->
                                         {% for team, index in home_teams.items %}
                                         <option value="{{ index }}">{{ team }}</option>
                                         {% endfor %}
@@ -54,8 +58,8 @@
                             </td>
                             <td>
                                 <div class="input-field col s12">
-                                    <select id="awayTeam" required>
-                                        <option value="" disabled selected>Select Away Team</option>
+                                    <select id="awayTeam" name="awayTeam" required>
+                                        <!-- <option value="" disabled selected>Select Away Team</option> -->
                                         {% for team, index in away_teams.items %}
                                         <option value="{{ index }}">{{ team }}</option>
                                         {% endfor %}
@@ -69,7 +73,35 @@
                             <td>
                                 <div class="input-field col s12">
                                     <input
+                                        id="homeGoals"
+                                        name="homeGoals"
+                                        type="number"
+                                        class="validate"
+                                        value="0"
+                                    />
+                                    <label for="homeGoals">Goals</label>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="input-field col s12">
+                                    <input
+                                        id="awayGoals"
+                                        name="awayGoals"
+                                        type="number"
+                                        class="validate"
+                                        value="0"
+                                    />
+                                    <label for="awayGoals">Goals</label>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <div class="input-field col s12">
+                                    <input
                                         id="homeShots"
+                                        name="homeShots"
                                         type="number"
                                         class="validate"
                                         value="0"
@@ -81,6 +113,7 @@
                                 <div class="input-field col s12">
                                     <input
                                         id="awayShots"
+                                        name="awayShots"
                                         type="number"
                                         class="validate"
                                         value="0"
@@ -95,6 +128,7 @@
                                 <div class="input-field col s12">
                                     <input
                                         id="homeShotsOnTarget"
+                                        name="homeShotsOnTarget"
                                         type="number"
                                         class="validate"
                                         value="0"
@@ -106,6 +140,7 @@
                                 <div class="input-field col s12">
                                     <input
                                         id="awayShotsOnTarget"
+                                        name="awayShotsOnTarget"
                                         type="number"
                                         class="validate"
                                         value="0"
@@ -120,6 +155,7 @@
                                 <div class="input-field col s12">
                                     <input
                                         id="homeRedCards"
+                                        name="homeRedCards"
                                         type="number"
                                         class="validate"
                                         value="0"
@@ -131,6 +167,7 @@
                                 <div class="input-field col s12">
                                     <input
                                         id="awayRedCards"
+                                        name="awayRedCards"
                                         type="number"
                                         class="validate"
                                         value="0"
@@ -143,34 +180,69 @@
 
                     <br />
 
-                    <button class="btn waves-effect waves-light" type="submit" name="action">
+                    <span>Select Classifier:</span>
+                    <div class="row">
+                        <div class="col s4">
+                            <label>
+                                <input name="classifier" value="lr" type="radio" checked />
+                                <span>Logistical Regression</span>
+                            </label>
+                        </div>
+                        <div class="col s4">
+                            <label>
+                                <input name="classifier" value="nb" type="radio" />
+                                <span>Naive Bayes</span>
+                            </label>
+                        </div>
+                        <div class="col s4">
+                            <label>
+                                <input name="classifier" value="rf" type="radio" />
+                                <span>Random Forest</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <br />
+
+                    <button class="btn waves-effect waves-light" onclick="predict()">
                         Predict Result
                         <i class="material-icons right">send</i>
                     </button>
 
-                    <div class="row" style="height: 80px; display: block">
+                    <div id="resultContainer" class="row" style="height: 80px; display: none;">
                         <br />
                         <br />
 
-                        <div id="homeWinProbability" class="col blue prob-container" style="width: 33.3%;">
+                        <div
+                            id="homeWinProbability"
+                            class="col blue prob-container"
+                            style="width: 33.3%;"
+                        >
                             <span class="prob-title">Home Win</span>
-                            <br/>
+                            <br />
                             <span class="prob-value">33.3%</span>
                         </div>
-                        <div id="drawProbability" class="col green prob-container" style="width: 33.3%;">
+                        <div
+                            id="drawProbability"
+                            class="col green prob-container"
+                            style="width: 33.3%;"
+                        >
                             <span class="prob-title">Draw</span>
-                            <br/>
+                            <br />
                             <span class="prob-value">33.3%</span>
                         </div>
-                        <div id="awayWinProbability" class="col red prob-container" style="width: 33.3%;">
+                        <div
+                            id="awayWinProbability"
+                            class="col red prob-container"
+                            style="width: 33.3%;"
+                        >
                             <span class="prob-title">Away Win</span>
-                            <br/>
+                            <br />
                             <span class="prob-value">33.3%</span>
                         </div>
                     </div>
 
-                    <br/>
-
+                    <br />
                 </form>
             </div>
         </div>
@@ -199,6 +271,40 @@
         <script>
             function init() {
                 M.AutoInit();
+            }
+
+            function probToPercentStr(prob) {
+                return (Math.floor((prob * 100) * 100) / 100) + '%';
+            }
+
+            function predict() {
+                var predictionForm = $('#predictionForm');
+
+                var formData = predictionForm.serialize();
+                console.log(formData);
+
+                M.toast({html: 'Processing...'});
+
+                $.get('/api/predict', formData, (res) => {
+                    console.log(res);
+
+                    if (res.success) {
+                        $('#homeWinProbability').css('width', probToPercentStr(res.data.homeWin))
+                        $('#homeWinProbability .prob-value').html(probToPercentStr(res.data.homeWin))
+
+                        $('#drawProbability').css('width', probToPercentStr(res.data.draw))
+                        $('#drawProbability .prob-value').html(probToPercentStr(res.data.draw))
+
+                        $('#awayWinProbability').css('width', probToPercentStr(res.data.awayWin))
+                        $('#awayWinProbability .prob-value').html(probToPercentStr(res.data.awayWin))
+
+                        $("#resultContainer").show();
+
+                        M.toast({html: res.msg});
+                    } else {
+                        M.toast({html: 'Error: ' + res.msg});
+                    }
+                });
             }
         </script>
     </body>
