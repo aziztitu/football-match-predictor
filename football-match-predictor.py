@@ -9,6 +9,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
 from time import time
 from sklearn.metrics import f1_score
+from os import path
 
 # Utility Functions
 
@@ -70,23 +71,29 @@ def derive_clean_sheet(src):
 
 # Data gathering
 
-data_files = [
-    'data/spanish-la-liga_zip/data/season-0910_csv.csv',
-    'data/spanish-la-liga_zip/data/season-1011_csv.csv',
-    'data/spanish-la-liga_zip/data/season-1112_csv.csv',
-    'data/spanish-la-liga_zip/data/season-1213_csv.csv',
-    'data/spanish-la-liga_zip/data/season-1314_csv.csv',
-    'data/spanish-la-liga_zip/data/season-1415_csv.csv',
-    'data/spanish-la-liga_zip/data/season-1516_csv.csv',
-    'data/spanish-la-liga_zip/data/season-1617_csv.csv',
-    'data/spanish-la-liga_zip/data/season-1718_csv.csv',
-    'data/spanish-la-liga_zip/data/season-1819_csv.csv',
-]
+en_data_folder = 'english-premier-league_zip'
+es_data_folder = 'spanish-la-liga_zip'
+fr_data_folder = 'french-ligue-1_zip'
+ge_data_folder = 'german-bundesliga_zip'
+it_data_folder = 'italian-serie-a_zip'
+
+# data_folders = [es_data_folder]
+data_folders = [en_data_folder, es_data_folder,
+                fr_data_folder, ge_data_folder, it_data_folder]
+
+season_range = (9, 18)
+
+data_files = []
+for data_folder in data_folders:
+    for season in range(season_range[0], season_range[1] + 1):
+        data_files.append(
+            'data/{}/data/season-{:02d}{:02d}_csv.csv'.format(data_folder, season, season + 1))
 
 data_frames = []
 
 for data_file in data_files:
-    data_frames.append(pd.read_csv(data_file))
+    if path.exists(data_file):
+        data_frames.append(pd.read_csv(data_file))
 
 data = pd.concat(data_frames).reset_index()
 print(data)
@@ -97,9 +104,7 @@ input_filter = ['home_encoded', 'away_encoded', 'HS',
                 'AS', 'HST', 'AST', 'HTCT', 'ATCT', 'HR', 'AR']
 output_filter = ['FTR']
 
-cols_to_consider = []
-cols_to_consider.extend(input_filter)
-cols_to_consider.extend(output_filter)
+cols_to_consider = input_filter + output_filter
 
 encoder = LabelEncoder()
 home_encoded = encoder.fit_transform(data['HomeTeam'])
@@ -134,9 +139,9 @@ nbClassifier = GaussianNB()
 dtClassifier = DecisionTreeClassifier()
 rfClassifier = RandomForestClassifier()
 
-print("Support Vector Machine")
-print("-" * 20)
-model(svc_classifier, X_train, Y_train, X_test, Y_test)
+# print("Support Vector Machine")
+# print("-" * 20)
+# model(svc_classifier, X_train, Y_train, X_test, Y_test)
 
 print()
 print("Logistic Regression one vs All Classifier")
@@ -148,10 +153,10 @@ print("Gaussain Naive Bayes Classifier")
 print("-" * 20)
 model(nbClassifier, X_train, Y_train, X_test, Y_test)
 
-print()
-print("Decision Tree Classifier")
-print("-" * 20)
-model(dtClassifier, X_train, Y_train, X_test, Y_test)
+# print()
+# print("Decision Tree Classifier")
+# print("-" * 20)
+# model(dtClassifier, X_train, Y_train, X_test, Y_test)
 
 print()
 print("Random Forest Classifier")
