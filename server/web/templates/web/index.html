@@ -13,13 +13,17 @@
             href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
         />
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
 
         <link rel="stylesheet" href="{% static "web/index.css" %}"/>
     </head>
     <body onload="init()">
         <nav class="navBar">
             <div class="nav-wrapper">
-                <a href="#" class="brand-logo">Football Match Predictor</a>
+                <a href="#" class="brand-logo valign-wrapper">
+                    <img class="left v-align" src="{% static "web/soccer-gear.png" %}" />
+                    Football Match Predictor
+                </a>
             </div>
         </nav>
 

@@ -1,3 +1,7 @@
+html {
+  font-family: 'Jost', sans-serif !important;
+}
+
 nav.navBar {
   background-color: black;
 }
@@ -5,6 +9,13 @@ nav.navBar {
 .brand-logo {
   left: 24px;
   color: yellow !important;
+}
+
+.brand-logo img {
+  width: 48px;
+  height: 48px;
+  margin: 8px 0;
+  margin-right: 24px;
 }
 
 label {
@@ -23,4 +34,13 @@ form.predictionForm table tr td:nth-child(2) {
 
 form.predictionForm table tr {
   border-bottom: 0 !important;
+}
+
+.btn {
+  background-color: black;
+  color: yellow;
+}
+
+.btn:hover {
+  background-color: #333;
 }
