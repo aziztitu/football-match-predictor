@@ -125,3 +125,4 @@ dmypy.json
 
 # Custom
 .vscode/
+exportedModels/
