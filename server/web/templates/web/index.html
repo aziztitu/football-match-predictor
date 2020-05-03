@@ -12,6 +12,7 @@
             rel="stylesheet"
             href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
         />
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
         <link rel="stylesheet" href="{% static "web/index.css" %}"/>
     </head>
@@ -23,16 +24,14 @@
         </nav>
 
         <div class="container section">
-            <div class="card">
-                <form class="card-content predictionForm">
+            <div class="card center">
+                <form class="card-content predictionForm" action="">
                     <table>
                         <tr>
                             <td>
                                 <div class="input-field col s12">
-                                    <select>
-                                        <option value="-1" disabled selected
-                                            >Choose your option</option
-                                        >
+                                    <select required class="validate">
+                                        <option value="" disabled selected>Select Home Team</option>
                                         {% for team, index in home_teams.items %}
                                         <option value="{{ index }}">{{ team }}</option>
                                         {% endfor %}
@@ -42,10 +41,8 @@
                             </td>
                             <td>
                                 <div class="input-field col s12">
-                                    <select>
-                                        <option value="-1" disabled selected
-                                            >Choose your option</option
-                                        >
+                                    <select required>
+                                        <option value="" disabled selected>Select Away Team</option>
                                         {% for team, index in away_teams.items %}
                                         <option value="{{ index }}">{{ team }}</option>
                                         {% endfor %}
@@ -55,6 +52,13 @@
                             </td>
                         </tr>
                     </table>
+
+                    <br/>
+
+                    <button class="btn waves-effect waves-light" type="submit" name="action">
+                        Submit
+                        <i class="material-icons right">send</i>
+                    </button>
                 </form>
             </div>
         </div>
