@@ -126,4 +126,5 @@ dmypy.json
 # Custom
 .vscode/
 exportedModels/
+server/static/
 server_uwsgi.ini
