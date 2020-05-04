@@ -8,8 +8,6 @@ import numpy as np
 import json
 
 # Create your views here.
-
-
 def index(request: HttpRequest):
 
     result = {

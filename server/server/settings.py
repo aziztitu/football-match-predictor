@@ -25,7 +25,7 @@ SECRET_KEY = 'idf*k#ns_5mci@txld67n%3k-(#*m1-3mfwlb6izny17#if5kq'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
