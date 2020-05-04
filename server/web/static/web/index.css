@@ -2,12 +2,15 @@ html {
     font-family: 'Jost', sans-serif !important;
 }
 
+nav {
+    padding: 0 24px;
+}
+
 nav.navBar {
     background-color: black;
 }
 
 .brand-logo {
-    left: 24px;
     color: yellow !important;
     width: 100%;
 }
