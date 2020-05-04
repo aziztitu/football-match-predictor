@@ -220,7 +220,7 @@
 
                     <br />
 
-                    <button class="btn waves-effect waves-light" onclick="predict()">
+                    <button id="predictBtn" class="btn waves-effect waves-light" onclick="predict()">
                         Predict Result
                         <i class="material-icons right">send</i>
                     </button>
@@ -311,9 +311,11 @@
                 console.log(formData);
 
                 M.toast({html: 'Processing...'});
+                $('#predictBtn').prop('disabled', true);
 
                 $.get('/api/predict', formData, (res) => {
                     console.log(res);
+                    $('#predictBtn').prop('disabled', false);
 
                     if (res.success) {
                         $('#homeWinProbability').css('width', probToPercentStr(res.data.homeWin))
