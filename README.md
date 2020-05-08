@@ -2,7 +2,7 @@
 
 ## Overview
 
-This project uses Machine Learning to predict the result of a football match when given some stats from half time.
+This project uses Machine Learning to predict the outcome of a football match when given some stats from half time.
 
 You can check out the demo here: https://football-predictor.projects.aziztitu.com/
 
@@ -19,20 +19,15 @@ Here are the links to the datasets that I used:
 - https://datahub.io/sports-data/german-bundesliga
 - https://datahub.io/sports-data/french-ligue-1
 
-
-Initially, I thought this was a huge amount of data, but on a closer look, it is actually not that big. Each League contained around 380 matches per season. So that gives us around 17100 [380 * 5 * 9] matches in total.
-
-## Data Pre-Processing / Data Analysis
+## Data Pre-Processing
 
 Since the data that I obtained was already structured, it made this part a whole lot easier. But there were still a lot of work to be done.
-
-The dataset had 62 different stats for each match, but I had to choose the right ones that have the highest impact on the match results.
 
 <pre>
 <b>Dataset Preview:
 Note: The output column is FTR [H = Home Win, D = Draw, A = Away Win].
 
-index Div        Date     HomeTeam    AwayTeam  FTHG  FTAG FTR  HTHG  ...  BbAvAHH BbMxAHA BbAvAHA   PSH   PSD    PSA  PSCH  PSCD   PSCA</b>
+index    Div      Date           HomeTeam    AwayTeam  FTHG  FTAG FTR  HTHG  ...  BbAvAHH BbMxAHA BbAvAHA   PSH   PSD    PSA  PSCH  PSCD   PSCA</b>
 
 0          0  E0  2009-08-15  Aston Villa       Wigan     0     2   A   0.0  ...     1.22    4.40    3.99   NaN   NaN    NaN   NaN   NaN    NaN
 1          1  E0  2009-08-15    Blackburn    Man City     0     2   A   0.0  ...     2.38    1.60    1.54   NaN   NaN    NaN   NaN   NaN    NaN
@@ -48,12 +43,12 @@ index Div        Date     HomeTeam    AwayTeam  FTHG  FTAG FTR  HTHG  ...  BbAvA
 </pre>
 
 ### Cleaning up the data
-Firstly, there were a few missing data inside the dataset. For features such as HomeGoals, and AwayGoals, I was able to replace the missing data with the average value of the respective team. But for features such as HomeTeam, AwayTeam, League, or any other discrete feature, I decided the best option was simply to drop those rows. Since the number of such rows was very small (less than 20), it was okay to drop them.
+Firstly, there were a few missing data inside the dataset. For features such as HomeGoals, and AwayGoals, I was able to replace the missing data with the mean value of the feature for the respective team. But for features such as HomeTeam, AwayTeam, League, or any other discrete ones, I decided the best option was simply to drop those rows. Since the number of such rows was very small (less than 20), it was okay to drop them.
 
 <pre>
 <b>Rows with missing values (NaN):
 
-home_encoded  away_encoded  HTHG  HTAG    HS    AS  HST  AST   HR   AR FTR  ...</b>
+home_encoded  away_encoded  HTHG   HTAG    HS    AS   HST  AST   HR   AR  FTR  ...</b>
 
 10585            16            95   NaN   NaN   NaN   NaN  NaN  NaN  NaN  NaN   A
 15254            35           129   NaN   NaN   NaN   NaN  NaN  NaN  NaN  NaN   A
@@ -62,35 +57,36 @@ home_encoded  away_encoded  HTHG  HTAG    HS    AS  HST  AST   HR   AR FTR  ...<
 ...
 </pre>
 
+## Data Analysis
 
 ### Feature Selection:
 
-Now that the data was clean, it was time to find out which features contributed the most towards the match results.
+Now that the data was clean, it was time to find out which features contributed the most towards the match results. The dataset had 62 different stats for each match, but I had to choose the right ones that had the highest impact.
 
 I started out by visualizing the distribution of some of the features that I thought were useful.
 
 **Home/Away Distribution:**<br/>
 <img src="images/ftr_distribution.png" width="500px" />
 
-Analyzing the Home/Away distribution, it was obvious that the match results favor the Home teams way more than the Away teams.
+Analyzing the Home/Away distribution, it was obvious that *the match results favor the Home teams way more than the Away teams*.
 
 **Shots:**
 
-Two of the features that I thought were very important but turned out otherwise were 'Home Shots' and 'Away Shots'. On further exploration, I found that these had very little impact, if any, on the final results. But, what did have a massive impact were the 'Home Shots on Target', and 'Away Shots on Target'.
+Two other features that I thought were very important but turned out otherwise were 'Home Shots' and 'Away Shots'. On further exploration, I found that these had very little impact, if any, on the final results. But, *what did have a massive impact were the 'Home Shots on Target', and 'Away Shots on Target'*.
 
-**Yellow/Red Card:**
+**Yellow/Red Cards:**
 
-The number of yellow cards seemed to have little to no impact on the result. But the number of red cards however had a tremendous impact.
+The number of yellow cards seemed to have little to no impact on the result. But *the number of red cards however had a tremendous impact*.
 
 **Statistical Tests:**
 
 After exploring some of the features manually, I went on to perform some statistical tests to see if these features were truly important.
 
-This is common problem in applied machine learning where you have to determine whether certain input features are relevant to the outcome.
+This is a common problem in applied machine learning where you have to determine whether certain input features are relevant to the outcome.
 
 In the case of classification problems where input variables are also categorical, we can use statistical tests to determine whether the output variable is dependent or independent of the input variables. If independent, then the input variable is a candidate for a feature that may be irrelevant to the problem and can possibly be removed from the dataset.
 
-One such test is the Pearson’s Chi-Squared statistical hypothesis. This was the result from the Chi-Squared Analysis:
+One such test is the <a href="https://machinelearningmastery.com/chi-squared-test-for-machine-learning/">Pearson’s Chi-Squared statistical hypothesis</a>. This was the result from the Chi-Squared Analysis:
 
 <pre>
 HC is NOT an important predictor
@@ -114,7 +110,7 @@ at_label is IMPORTANT for Prediction
 
 Another problem that we have is Collinearity, which is the state where two variables are highly correlated and contain similiar information about the variance within a given dataset. Add in more features that are collinear of each others and we get multicollinearity.
 
-One of the methods we can use to check for multicollinear variables is calculating the Variance inflation factor (VFI). A high VIF indicates that the associated independent variable is highly collinear with the other variables in the model.
+One of the methods we can use to check for multicollinear variables is calculating the Variance inflation factor (VIF). A high VIF indicates that the associated independent variable is highly collinear with the other variables in the model.
 
 After calculating the VIF on this dataset, I found the following variables to have high VIF:
 
@@ -144,12 +140,21 @@ AR              non-null float64
 
 Since I'm using Python for this project. It is very easy to test multiple models to compare performance.
 
-For this project, I decided to try the following 3 models:
-- Naive Bayes
+For this project, I selected the following 3 models:
+- Naive Bayes:
+  - This is based on the famous <a href="https://en.wikipedia.org/wiki/Bayes%27_theorem">Bayes’ Theorem</a> which gives the probability of an event occuring given the probability of another event that has already occured.
+  - The *naive* assumption that is made in this particular classifier is that all the features are •independent* of each other. This makes it easy to make the prediction, but that is exactly why the predictions are quite naive.
+  - But in practice, there are quite a few real-world use cases of this type of classifier, namely document classification and spam-filtering among many others.
 - Random Forest
+  - Random Forests are simply an *ensemble* of Decision Trees, where a large number of decision trees spit out a prediction of their own, and the prediction with the most votes becomes the model's prediction.
+  - A decision tree, which is the building block of a Random Forest, is exactly what the name suggests. It is a *tree*-like structure in which the model makes a yes/no decision at each node to traverse the tree and ultimately reaches one of the leaf nodes where it makes a prediction.
 - Logistic Regression
+  - Logistic regression is named for the function used at the core of the method, the <a href="https://en.wikipedia.org/wiki/Logistic_function">logistic function</a> or the sigmoid function.
+  - It uses an equation as the representation, very much like linear regression, where the inputs are combined linearly using weights or coefficient values to predict an output value.
+  - On their own, logistic regressions are only binary classifiers, meaning they cannot handle output with more than two classes. In our case we have 3 classes for our output (H, D, A).
+  - However, there are clever extensions to logistic regression to do just that. In one-vs-rest logistic regression (OVR), which is what I used here, a separate model is trained for each class predicted whether an observation is that class or not (thus making it a binary classification problem). It assumes that each classification problem (e.g. class H or not) is independent.
 
-I split the dataset into 4:1 ratio for training and testing. After the first run, these were the results:
+I split the dataset into a 4:1 ratio for training and testing. After the first run, these were the results:
 
 ```
 Logistic Regression one vs All Classifier
@@ -197,9 +202,9 @@ Made Predictions in 0.111957 seconds
 
 As you can see, it was not too bad for the first run. We have around 65% accuracy with Logistic Regression, and Random Forest, whereas 60% with Naive Bayes.
 
-After playing around with it for a while I found that adding 'Home Shots', and 'Away Shots' back actually helped increase the accuracy to around 70%.
+After playing around with it for a while I found that adding 'Home Shots', and 'Away Shots' back actually helped increase the accuracy a little bit.
 
-After a lot of tweakings, here are the final results:
+After a lot of tweaking, here are the final results:
 
 ```
 Logistic Regression one vs All Classifier
@@ -245,9 +250,11 @@ Accuracy:0.6907894736842105
 Made Predictions in 0.124963 seconds
 ```
 
+Both *Logistic Regression model* and the *Random Forest model* had the best performance with ***70% accuracy***, and the *Naive Bayes model* had around *65%*.
+
 ## Next Steps
 
-Initially, I did not think I was gonna get 70% accuracy with this model. But it is really cool to see it in action. But there are a few things I'd like to improve from here.
+Initially, I did not think I was gonna get 70% accuracy with these models. But it is really cool to see it in action. But there are a few things I'd like to improve from here.
 
 ### Team skill & strategy
 
@@ -255,11 +262,11 @@ One of the drawbacks at the moment is that the teams don't have a huge impact on
 
 The other thing I want the model to take into account is the ability of a team to bounce back. There are certain teams in football that play defensive in the first half, and are more aggressive in the second half or vice versa.
 
-In order for the model to take these things into account, I plan to pre-compute these values for each team and store it locally. During prediction, I can use the respective team's computed values as supplemental features which should help it make better predictions.
+In order for the model to take these things into account, I plan to pre-compute these values for each team and store them locally. I can re-train the models with these features and during prediction, I can use the respective team's pre-computed values as supplemental features which should help it make better predictions.
 
 ### Team Roster / Player Skills
 
-I'd like the model to also take the players on the pitch into consideration when making the prediction. In practice, the team has a high chance of winning the game when the star players are on the pitch.
+I'd like the model to also take the players on the pitch into consideration when making the prediction. In practice, a team has a higher chance of winning the game when its star players are on the pitch.
 
 ### Live Prediction
 
