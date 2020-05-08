@@ -127,7 +127,7 @@ AF: 2
 
 The earlier observation regarding the Home and Away shots is verified from this test. And we've also found more variables that are collinear.
 
-After dropping the unnecessary features, these are the once I selected:
+After dropping the unnecessary features, these are the ones I selected:
 
 ```
 home_encoded    non-null float64
@@ -139,4 +139,143 @@ AST             non-null float64
 HR              non-null float64
 AR              non-null float64
 ```
+
+## Training & Testing the Models:
+
+Since I'm using Python for this project. It is very easy to test multiple models to compare performance.
+
+For this project, I decided to try the following 3 models:
+- Naive Bayes
+- Random Forest
+- Logistic Regression
+
+I split the dataset into 4:1 ratio for training and testing. After the first run, these were the results:
+
+```
+Logistic Regression one vs All Classifier
+--------------------
+Model trained in 0.804028 seconds
+
+Training Info:
+F1 Score:0.6612824278022515
+Accuracy:0.6612824278022515
+Made Predictions in 0.001457 seconds
+
+Test Metrics:
+F1 Score:0.6633109619686801
+Accuracy:0.6633109619686801
+Made Predictions in 0.000830 seconds
+
+Gaussain Naive Bayes Classifier
+--------------------
+Model trained in 0.016375 seconds
+
+Training Info:
+F1 Score:0.6289769946157612
+Accuracy:0.6289769946157612
+Made Predictions in 0.007448 seconds
+
+Test Metrics:
+F1 Score:0.6061856823266219
+Accuracy:0.6061856823266219
+Made Predictions in 0.001650 seconds
+
+Random Forest Classifier
+--------------------
+Model trained in 1.326726 seconds
+
+Training Info:
+F1 Score:0.9999300748199427
+Accuracy:0.9999300748199427
+Made Predictions in 0.243328 seconds
+
+Test Metrics:
+F1 Score:0.6554809843400448
+Accuracy:0.6554809843400448
+Made Predictions in 0.111957 seconds
+```
+
+As you can see, it was not too bad for the first run. We have around 65% accuracy with Logistic Regression, and Random Forest, whereas 60% with Naive Bayes.
+
+After playing around with it for a while I found that adding 'Home Shots', and 'Away Shots' back actually helped increase the accuracy to around 70%.
+
+After a lot of tweakings, here are the final results:
+
+```
+Logistic Regression one vs All Classifier
+--------------------
+Model trained in 0.714509 seconds
+
+Training Info:
+F1 Score:0.6815789473684211
+Accuracy:0.6815789473684211
+Made Predictions in 0.001436 seconds
+
+Test Metrics:
+F1 Score:0.7092105263157895
+Accuracy:0.7092105263157895
+Made Predictions in 0.000857 seconds
+
+Gaussain Naive Bayes Classifier
+--------------------
+Model trained in 0.013822 seconds
+
+Training Info:
+F1 Score:0.6398026315789473
+Accuracy:0.6398026315789473
+Made Predictions in 0.007501 seconds
+
+Test Metrics:
+F1 Score:0.6526315789473685
+Accuracy:0.6526315789473685
+Made Predictions in 0.002132 seconds
+
+Random Forest Classifier
+--------------------
+Model trained in 1.527298 seconds
+
+Training Info:
+F1 Score:0.999671052631579
+Accuracy:0.999671052631579
+Made Predictions in 0.267743 seconds
+
+Test Metrics:
+F1 Score:0.6907894736842105
+Accuracy:0.6907894736842105
+Made Predictions in 0.124963 seconds
+```
+
+## Next Steps
+
+Initially, I did not think I was gonna get 70% accuracy with this model. But it is really cool to see it in action. But there are a few things I'd like to improve from here.
+
+### Team skill & strategy
+
+One of the drawbacks at the moment is that the teams don't have a huge impact on the outcome. But in practice, that plays a huge role. A first-division team has a much higher chance of winning a game against a third-division team, even if the match was played at the third-division team's home ground.
+
+The other thing I want the model to take into account is the ability of a team to bounce back. There are certain teams in football that play defensive in the first half, and are more aggressive in the second half or vice versa.
+
+In order for the model to take these things into account, I plan to pre-compute these values for each team and store it locally. During prediction, I can use the respective team's computed values as supplemental features which should help it make better predictions.
+
+### Team Roster / Player Skills
+
+I'd like the model to also take the players on the pitch into consideration when making the prediction. In practice, the team has a high chance of winning the game when the star players are on the pitch.
+
+### Live Prediction
+
+This is more of a long shot. As of now, the model makes the prediction based on the half-time stats. Eventually I'd like the model to predict the results for a live match all the way from minute 0 to minute 90. To do this, it must learn to account for the current match time. But training the model to account for this is going to be extremely hard.
+
+## References
+
+- Dataset: https://datahub.io/collections/football
+- Multi-Collinearity: https://towardsdatascience.com/multicollinearity-in-data-science-c5f6c0fe6edf
+- Variance Inflation Factor: https://medium.com/@analyttica/what-is-the-variance-inflation-factor-vif-d1dc12bb9cf5
+- Chi Squared Test: https://machinelearningmastery.com/chi-squared-test-for-machine-learning/
+- Naive Bayes: https://www.geeksforgeeks.org/naive-bayes-classifiers/
+- Naive Bayes Usage: https://scikit-learn.org/stable/modules/naive_bayes.html
+- Random Forest: https://towardsdatascience.com/understanding-random-forest-58381e0602d2
+- Random Forest Usage: https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html
+- Logistic Regression One vs Rest: https://utkuufuk.com/2018/06/03/one-vs-all-classification/
+- Logistic Regression One vs Rest Usage: https://machinelearningmastery.com/one-vs-rest-and-one-vs-one-for-multi-class-classification/
+
 
